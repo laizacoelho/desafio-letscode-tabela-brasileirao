@@ -38,7 +38,7 @@ public class Brasileirao {
         this.brasileirao = jogos.stream()
                 .filter(filtro) //filtrar por ano
                 .collect(Collectors.groupingBy(
-                        Jogo::rodada,
+                        jogo -> jogo.getRodada(),
                         Collectors.mapping(Function.identity(), Collectors.toList())));
 
     }
@@ -88,7 +88,7 @@ public class Brasileirao {
     }
 
     private List<Time> todosOsTimes() {
-        List<Time> mandantes = todosOsJogos()
+      /*  List<Time> mandantes = todosOsJogos()
                 .stream()
                 .map(Jogo::mandante)
                 .toList();
@@ -96,7 +96,7 @@ public class Brasileirao {
         List<Time> visitantes = todosOsJogos()
                 .stream()
                 .map(Jogo::visitante)
-                .toList();
+                .toList();*/
 
         return null;
     }
