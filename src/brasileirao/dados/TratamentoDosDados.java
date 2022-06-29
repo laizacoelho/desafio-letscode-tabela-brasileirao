@@ -18,14 +18,14 @@ public class TratamentoDosDados {
         int tamanho = listaDeJogosBrasileirao.size();
         List<Jogo> jogos = new ArrayList<>();
 
-        for (int i=1; i< tamanho; i++) {
-            String[] dadosDoJogo = listaDeJogosBrasileirao.get(1).split(";");
+        for (int i=1; i< 2170; i++) {
+            String[] dadosDoJogo = listaDeJogosBrasileirao.get(i).split(";");
 
             Integer rodada = Integer.parseInt(dadosDoJogo[0]);
 
             LocalDate dataDoJogo = tratarDataDoJogo(dadosDoJogo[1]);
-            LocalTime horarioDoJogo = tratarHoraDoJogo(dadosDoJogo[2]);
-            DayOfWeek diaDoJogo = tratarDiaDoJogo(dataDoJogo);
+            LocalTime horarioDoJogo = tratarHoraDoJogo(dadosDoJogo[2], i);
+            DayOfWeek diaDoJogo = dataDoJogo.getDayOfWeek();
             DataDoJogo data = new DataDoJogo(dataDoJogo,horarioDoJogo,diaDoJogo);
 
             Time mandante = new Time(dadosDoJogo[4]);
@@ -62,22 +62,24 @@ public class TratamentoDosDados {
 
 
     private static LocalDate tratarDataDoJogo (String data) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate dataFormatada = LocalDate.parse(data, formatter);
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        return dataFormatada;
+        return LocalDate.parse(data, formato);
     }
 
-    private static LocalTime tratarHoraDoJogo (String hora) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H'h'mm");
-        LocalTime horaFormatada = LocalTime.parse(hora, formatter);
+    private static LocalTime tratarHoraDoJogo (String hora, int indice) {
+        DateTimeFormatter formato;
 
-        return horaFormatada;
-    }
+        if (hora ==  null) {
+            return null;
+        }
 
-    private static DayOfWeek tratarDiaDoJogo (LocalDate data) {
-        DayOfWeek diaFormatado = data.getDayOfWeek();
+        if (indice < 4227) {
+            formato = DateTimeFormatter.ofPattern("H'h'mm");
+        } else {
+           formato = DateTimeFormatter.ofPattern("H:mm");
+        }
 
-        return diaFormatado;
+        return LocalTime.parse(hora, formato);
     }
 }
