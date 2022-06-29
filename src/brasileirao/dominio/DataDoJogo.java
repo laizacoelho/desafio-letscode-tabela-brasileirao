@@ -18,17 +18,5 @@ public class DataDoJogo {
     public LocalDate getData() {
         return data;
     }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public void setHorario(LocalTime horario) {
-        this.horario = horario;
-    }
-
-    public void setDia(DayOfWeek dia) {
-        this.dia = dia;
-    }
 }
 

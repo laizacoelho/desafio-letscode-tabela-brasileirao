@@ -21,26 +21,6 @@ public class TestandoBrasileirao {
 
         Path file = Path.of("campeonatos-brasileiro-pontos-corridos.csv");
 
-
-      /*  List<String> jogosBrasileirao;
-        try (Stream<String> stream = Files.lines(Paths.get("campeonatos-brasileiro-pontos-corridos.csv"))) {
-            jogosBrasileirao = stream.collect(Collectors.toList());
-        } */
-
-        List<String> listaJogosBrasileirao = LeituraDosDados.lerArquivo("campeonatos-brasileiro-pontos-corridos.csv");
-        List<Jogo>  jogos = TratamentoDosDados.separarDadosPorLinha(listaJogosBrasileirao);
-      /*  if (listaJogosBrasileirao != null) {
-            String[] jogo33 = TratamentoDosDados.separarDadosPorLinha(listaJogosBrasileirao);
-        } else {
-            System.out.println("Erro ao tentar ler o arquivo de jogos");
-        } */
-
-
-
-
-
-
-
 //        Predicate<Jogo> brasileiraoPorAno = (jogo) -> jogo.data().data().getYear() == 2020;
 //        Predicate<Jogo> brasileiraoPorAno2 = (jogo) -> jogo.data().data().getYear() == 2021;
         Predicate<Jogo> filtro = (jogo) -> jogo.getData().getData().getYear() == 2014;

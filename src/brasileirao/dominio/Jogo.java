@@ -45,48 +45,4 @@ public class Jogo{
     public DataDoJogo getData() {
         return data;
     }
-
-    public void setRodada(Integer rodada) {
-        this.rodada = rodada;
-    }
-
-    public void setData(DataDoJogo data) {
-        this.data = data;
-    }
-
-    public void setMandante(Time mandante) {
-        this.mandante = mandante;
-    }
-
-    public void setVisitante(Time visitante) {
-        this.visitante = visitante;
-    }
-
-    public void setVencedor(Time vencedor) {
-        this.vencedor = vencedor;
-    }
-
-    public void setArena(String arena) {
-        this.arena = arena;
-    }
-
-    public void setMandantePlacar(Integer mandantePlacar) {
-        this.mandantePlacar = mandantePlacar;
-    }
-
-    public void setVisitantePlacar(Integer visitantePlacar) {
-        this.visitantePlacar = visitantePlacar;
-    }
-
-    public void setEstadoMandante(String estadoMandante) {
-        this.estadoMandante = estadoMandante;
-    }
-
-    public void setEstadoVisitante(String estadoVisitante) {
-        this.estadoVisitante = estadoVisitante;
-    }
-
-    public void setEstadoVencedor(String estadoVencedor) {
-        this.estadoVencedor = estadoVencedor;
-    }
 }

@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class TratamentoDosDados {
 
-    public static List<Jogo> separarDadosPorLinha(List<String> listaDeJogosBrasileirao) {
+    public static List<Jogo> tratarDados(List<String> listaDeJogosBrasileirao) {
         int tamanho = listaDeJogosBrasileirao.size();
         List<Jogo> jogos = new ArrayList<>();
 
@@ -41,10 +41,22 @@ public class TratamentoDosDados {
             String estadoVisitante = dadosDoJogo[11];
             String estadoVencedor = dadosDoJogo[12];
 
-            Jogo jogo = new Jogo(rodada, data, mandante,visitante, vencedor, arena, mandantePlacar, visitantePlacar, estadoMandante, estadoVisitante, estadoVencedor);
+            Jogo jogo = new Jogo(
+                    rodada,
+                    data,
+                    mandante,
+                    visitante,
+                    vencedor,
+                    arena,
+                    mandantePlacar,
+                    visitantePlacar,
+                    estadoMandante,
+                    estadoVisitante,
+                    estadoVencedor
+            );
             jogos.add(jogo);
         }
-        
+
         return jogos;
     }
 

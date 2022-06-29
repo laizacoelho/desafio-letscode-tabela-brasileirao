@@ -1,5 +1,7 @@
 package brasileirao.negocio;
 
+import brasileirao.dados.LeituraDosDados;
+import brasileirao.dados.TratamentoDosDados;
 import brasileirao.dominio.DataDoJogo;
 import brasileirao.dominio.Jogo;
 import brasileirao.dominio.PosicaoTabela;
@@ -33,14 +35,14 @@ public class Brasileirao {
     private Predicate<Jogo> filtro;
 
     public Brasileirao(Path arquivo, Predicate<Jogo> filtro) throws IOException {
-        this.jogos = lerArquivo(arquivo);
+        List<String> listaJogosBrasileirao = LeituraDosDados.lerArquivo(arquivo);
+        this.jogos = TratamentoDosDados.tratarDados(listaJogosBrasileirao);
         this.filtro = filtro;
         this.brasileirao = jogos.stream()
                 .filter(filtro) //filtrar por ano
                 .collect(Collectors.groupingBy(
                         jogo -> jogo.getRodada(),
                         Collectors.mapping(Function.identity(), Collectors.toList())));
-
     }
 
     public Map<Jogo, Integer> mediaGolsPorJogo() {
@@ -129,11 +131,13 @@ public class Brasileirao {
         return null;
     }
 
-    public List<Jogo> lerArquivo(Path file) throws IOException {
+    // Criada uma classe estática para este método: LeituraDosDados
+   /* public List<Jogo> lerArquivo(Path file) throws IOException {
         return null;
-    }
+    } */
 
-    private DayOfWeek getDayOfWeek(String dia) {
+    // Usado o getDayOfWeek da biblioteca do DayOfWeek, feito na classe TratamentoDosDados
+   /* private DayOfWeek getDayOfWeek(String dia) {
         return Map.of(
                 "Segunda-feira", DayOfWeek.SUNDAY,
                 "Terça-feira", DayOfWeek.SUNDAY,
@@ -143,7 +147,7 @@ public class Brasileirao {
                 "Sábado", DayOfWeek.SUNDAY,
                 "Domingo", DayOfWeek.SUNDAY
         ).get(dia);
-    }
+    } */
 
     // METODOS EXTRA
 
