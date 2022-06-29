@@ -9,6 +9,8 @@ import brasileirao.negocio.Brasileirao;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ public class TestandoBrasileirao {
 //        Predicate<Jogo> brasileiraoPorAno2 = (jogo) -> jogo.data().data().getYear() == 2021;
         Predicate<Jogo> filtro = (jogo) -> jogo.getData().getData().getYear() == 2014;
 //        Predicate<Jogo> filtro = brasileiraoPorAno.or(brasileiraoPorAno2);
+
 
         Brasileirao brasileirao = new Brasileirao(file, filtro);
 

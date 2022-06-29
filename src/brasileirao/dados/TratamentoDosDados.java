@@ -10,7 +10,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class TratamentoDosDados {
 
@@ -18,13 +17,13 @@ public class TratamentoDosDados {
         int tamanho = listaDeJogosBrasileirao.size();
         List<Jogo> jogos = new ArrayList<>();
 
-        for (int i=1; i< 2170; i++) {
+        for (int i=1; i< tamanho; i++) {
             String[] dadosDoJogo = listaDeJogosBrasileirao.get(i).split(";");
 
             Integer rodada = Integer.parseInt(dadosDoJogo[0]);
 
             LocalDate dataDoJogo = tratarDataDoJogo(dadosDoJogo[1]);
-            LocalTime horarioDoJogo = tratarHoraDoJogo(dadosDoJogo[2], i);
+            LocalTime horarioDoJogo = tratarHoraDoJogo(dadosDoJogo[2]);
             DayOfWeek diaDoJogo = dataDoJogo.getDayOfWeek();
             DataDoJogo data = new DataDoJogo(dataDoJogo,horarioDoJogo,diaDoJogo);
 
@@ -67,18 +66,15 @@ public class TratamentoDosDados {
         return LocalDate.parse(data, formato);
     }
 
-    private static LocalTime tratarHoraDoJogo (String hora, int indice) {
+    private static LocalTime tratarHoraDoJogo(String hora) {
         DateTimeFormatter formato;
 
-        if (hora ==  null) {
+        if (hora.equals("")) {
             return null;
         }
 
-        if (indice < 4227) {
-            formato = DateTimeFormatter.ofPattern("H'h'mm");
-        } else {
-           formato = DateTimeFormatter.ofPattern("H:mm");
-        }
+        hora = hora.replaceAll("h", ":");
+        formato = DateTimeFormatter.ofPattern("HH:mm");
 
         return LocalTime.parse(hora, formato);
     }
