@@ -11,31 +11,40 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
+
 
 public class TestandoBrasileirao {
 
     public static void main(String[] args) throws IOException {
 
         Path file = Path.of("campeonatos-brasileiro-pontos-corridos.csv");
+        Scanner scanner = new Scanner(System.in);
+        int menu;
+
+        do {
+            System.out.println("Digite a temporada que deseja ver as estatísticas do Brasileirão");
+            System.out.println("obs: Deve ser um ano entre 2003 e 2020");
+            menu = scanner.nextInt();
+
+        } while(menu < 2003 || menu > 2020);
+
+        Brasileirao brasileirao = new Brasileirao(file, menu);
 
 //        Predicate<Jogo> brasileiraoPorAno = (jogo) -> jogo.data().data().getYear() == 2020;
 //        Predicate<Jogo> brasileiraoPorAno2 = (jogo) -> jogo.data().data().getYear() == 2021;
-        Predicate<Jogo> filtro = (jogo) -> jogo.getData().getData().getYear() == 2014;
+//        Predicate<Jogo> filtro = (jogo) -> jogo.getData().getData().getYear() == 2014;
 //        Predicate<Jogo> filtro = brasileiraoPorAno.or(brasileiraoPorAno2);
 
 
-        Brasileirao brasileirao = new Brasileirao(file, filtro);
+//        Brasileirao brasileirao = new Brasileirao(file, filtro);
 
-        Set<PosicaoTabela> posicoes = brasileirao.tabela();
+ //       Set<PosicaoTabela> posicoes = brasileirao.tabela();
 
         imprimirEstatisticas(brasileirao);
 
-        imprimirTabela(posicoes);
+//        imprimirTabela(posicoes);
 
     }
 
@@ -46,7 +55,7 @@ public class TestandoBrasileirao {
         System.out.println("Estatisticas (Total de jogos) - " + statistics.getCount());
         System.out.println("Estatisticas (Media de gols) - " + statistics.getAverage());
 
-        Map.Entry<Resultado, Long> placarMaisRepetido = brasileirao.placarMaisRepetido();
+ /*       Map.Entry<Resultado, Long> placarMaisRepetido = brasileirao.placarMaisRepetido();
 
         System.out.println("Estatisticas (Placar mais repetido) - "
                 + placarMaisRepetido.getKey() + " (" +placarMaisRepetido.getValue() + " jogo(s))");
@@ -54,7 +63,7 @@ public class TestandoBrasileirao {
         Map.Entry<Resultado, Long> placarMenosRepetido = brasileirao.placarMenosRepetido();
 
         System.out.println("Estatisticas (Placar menos repetido) - "
-                + placarMenosRepetido.getKey() + " (" +placarMenosRepetido.getValue() + " jogo(s))");
+                + placarMenosRepetido.getKey() + " (" +placarMenosRepetido.getValue() + " jogo(s))"); */
 
         Long jogosCom3OuMaisGols = brasileirao.totalJogosCom3OuMaisGols();
         Long jogosComMenosDe3Gols = brasileirao.totalJogosComMenosDe3Gols();

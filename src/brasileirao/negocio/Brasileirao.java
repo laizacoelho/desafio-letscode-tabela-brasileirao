@@ -30,19 +30,37 @@ import java.util.stream.Stream;
 
 public class Brasileirao {
 
-    private Map<Integer, List<Jogo>> brasileirao;
+//    private Map<Integer, List<Jogo>> brasileirao;
+    private List<Jogo> brasileirao;
     private List<Jogo> jogos;
-    private Predicate<Jogo> filtro;
+//    private Predicate<Jogo> filtro;
+    private int ano;
 
-    public Brasileirao(Path arquivo, Predicate<Jogo> filtro) throws IOException {
-        List<String> listaJogosBrasileirao = LeituraDosDados.lerArquivo(arquivo);
-        this.jogos = TratamentoDosDados.tratarDados(listaJogosBrasileirao);
+ /*   public Brasileirao(Path arquivo, Predicate<Jogo> filtro) throws IOException {
         this.filtro = filtro;
         this.brasileirao = jogos.stream()
                 .filter(filtro) //filtrar por ano
                 .collect(Collectors.groupingBy(
                         jogo -> jogo.getRodada(),
                         Collectors.mapping(Function.identity(), Collectors.toList())));
+    } */
+
+    public Brasileirao(Path arquivo, int ano) throws IOException {
+        List<String> listaJogosBrasileirao = LeituraDosDados.lerArquivo(arquivo);
+        this.jogos = TratamentoDosDados.tratarDados(listaJogosBrasileirao);
+        this.ano = ano;
+
+        //2020 e 2021 foi um único campeonato devido à pandemia
+        if (ano == 2020){
+            this.brasileirao =  this.jogos.stream()
+                    .filter(jogo -> jogo.getData().getData().getYear() == 2021 ||
+                            jogo.getData().getData().getYear() == 2020)
+                    .collect(Collectors.toList());
+        } else {
+            this.brasileirao = this.jogos.stream()
+                    .filter(jogo -> jogo.getData().getData().getYear() == ano)
+                    .collect(Collectors.toList());
+        }
     }
 
     public Map<Jogo, Integer> mediaGolsPorJogo() {
@@ -50,31 +68,44 @@ public class Brasileirao {
     }
 
     public IntSummaryStatistics estatisticasPorJogo() {
-        return null;
+        return this.brasileirao.stream()
+                .mapToInt(jogo -> jogo.getVisitantePlacar() + jogo.getMandantePlacar())
+                .summaryStatistics();
     }
 
-    public List<Jogo> todosOsJogos() {
-        return null;
-    }
+    public List<Jogo> todosOsJogos() { return null; }
 
     public Long totalVitoriasEmCasa() {
-        return null;
+       return this.brasileirao.stream()
+                .filter(jogo -> jogo.getMandantePlacar() > jogo.getVisitantePlacar())
+                .count();
     }
 
     public Long totalVitoriasForaDeCasa() {
-        return null;
+        return this.brasileirao.stream()
+                .filter(jogo -> jogo.getMandantePlacar() < jogo.getVisitantePlacar())
+                .count();
     }
 
     public Long totalEmpates() {
-        return null;
+
+        return this.brasileirao.stream()
+                .filter(jogo -> jogo.getVencedor().getNome().equals("-"))
+                .count();
     }
 
     public Long totalJogosComMenosDe3Gols() {
-        return null;
+        return this.brasileirao.stream()
+                .mapToInt(jogo -> jogo.getVisitantePlacar() + jogo.getMandantePlacar())
+                .filter(jogo -> jogo < 3)
+                .count();
     }
 
     public Long totalJogosCom3OuMaisGols() {
-        return null;
+        return this.brasileirao.stream()
+                .mapToInt(jogo -> jogo.getVisitantePlacar() + jogo.getMandantePlacar())
+                .filter(jogo -> jogo >= 3)
+                .count();
     }
 
     public Map<Resultado, Long> todosOsPlacares() {

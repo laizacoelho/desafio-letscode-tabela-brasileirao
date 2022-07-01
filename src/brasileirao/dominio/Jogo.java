@@ -45,4 +45,20 @@ public class Jogo{
     public DataDoJogo getData() {
         return data;
     }
+
+    public Time getVencedor() {
+        return vencedor;
+    }
+
+    public Time getMandante() {
+        return mandante;
+    }
+
+    public Integer getMandantePlacar() {
+        return mandantePlacar;
+    }
+
+    public Integer getVisitantePlacar() {
+        return visitantePlacar;
+    }
 }
