@@ -3,6 +3,7 @@ package brasileirao.dominio;
 import java.util.Objects;
 
 public class Jogo{
+
     private Integer rodada;
     private DataDoJogo data;
     private Time mandante;
@@ -67,8 +68,8 @@ public class Jogo{
     public Integer getVisitantePlacar() {
         return visitantePlacar;
     }
-/*
-    @Override
+
+ /*   @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Jogo)) return false;

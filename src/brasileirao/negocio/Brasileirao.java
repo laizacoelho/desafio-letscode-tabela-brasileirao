@@ -2,27 +2,19 @@ package brasileirao.negocio;
 
 import brasileirao.dados.LeituraDosDados;
 import brasileirao.dados.TratamentoDosDados;
-import brasileirao.dominio.DataDoJogo;
 import brasileirao.dominio.Jogo;
 import brasileirao.dominio.PosicaoTabela;
 import brasileirao.dominio.Resultado;
 import brasileirao.dominio.Time;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.toList;
 
 public class Brasileirao {
@@ -33,7 +25,7 @@ public class Brasileirao {
 //    private Predicate<Jogo> filtro;
     private int ano;
 
- /*   public Brasileirao(Path arquivo, Predicate<Jogo> filtro) throws IOException {
+/*   public Brasileirao(Path arquivo, Predicate<Jogo> filtro) throws IOException {
         this.filtro = filtro;
         this.brasileirao = jogos.stream()
                 .filter(filtro) //filtrar por ano
@@ -60,18 +52,22 @@ public class Brasileirao {
         }
     }
 
+    //O que seria a média de gol em um único jogo? Considerei total de gols naquele jogo.
     public Map<Jogo, Integer> mediaGolsPorJogo() {
-        return null;
+       return this.brasileirao.stream()
+                .collect(Collectors.toMap(Function.identity(),
+                        mediaGols -> mediaGols.getMandantePlacar() + mediaGols.getVisitantePlacar()));
     }
 
     public IntSummaryStatistics estatisticasPorJogo() {
+
         return this.brasileirao.stream()
                 .mapToInt(jogo -> jogo.getVisitantePlacar() + jogo.getMandantePlacar())
                 .summaryStatistics();
     }
 
     public List<Jogo> todosOsJogos() {
-        return brasileirao;
+        return this.brasileirao;
     }
 
     public Long totalVitoriasEmCasa() {
@@ -107,21 +103,18 @@ public class Brasileirao {
     }
 
     public Map<Resultado, Long> todosOsPlacares() {
-
         return this.brasileirao.stream()
                 .map(resultado -> new Resultado(resultado.getMandantePlacar(), resultado.getVisitantePlacar()))
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-
     }
 
     public Map.Entry<Resultado, Long> placarMaisRepetido() {
-
         Map<Resultado, Long> placares = todosOsPlacares();
 
         Optional<Map.Entry<Resultado, Long>> maiorOcorrencia = placares
                 .entrySet()
                 .stream()
-                .max(Comparator.comparing(Map.Entry::getValue));
+                .max(Map.Entry.comparingByValue());
 
         return maiorOcorrencia.orElse(null);
 
@@ -133,24 +126,23 @@ public class Brasileirao {
         Optional<Map.Entry<Resultado, Long>> menorOcorrencia = placares
                 .entrySet()
                 .stream()
-                .min(Comparator.comparing(Map.Entry::getValue));
+                .min(Map.Entry.comparingByValue());
 
         return menorOcorrencia.orElse(null);
 
     }
 
-    public List<Time> todosOsTimes() {
+    private List<Time> todosOsTimes() {
         List<Time> mandantes = todosOsJogos()
                 .stream()
                 .map(Jogo::getVisitante)
-                .collect(toList());
-               // .toList();
+                .toList();
+
 
         List<Time> visitantes = todosOsJogos()
                 .stream()
                 .map(Jogo::getVisitante)
-                .collect(toList());
-              //  .toList();
+                .toList();
 
         return null;
     }
@@ -160,27 +152,101 @@ public class Brasileirao {
      * @return Map<Time, List<Jogo>>
      */
     private Map<Time, List<Jogo>> todosOsJogosPorTimeComoMandantes() {
-        return null;
+        return  this.brasileirao.stream()
+                .collect(Collectors.groupingBy(Jogo::getMandante));
     }
+
 
     /**
      * todos os jogos que cada time foi visitante
      * @return Map<Time, List<Jogo>>
      */
     private Map<Time, List<Jogo>> todosOsJogosPorTimeComoVisitante() {
-        return null;
+        return this.brasileirao.stream()
+                .collect(Collectors.groupingBy(Jogo::getVisitante));
     }
 
     public Map<Time, List<Jogo>> todosOsJogosPorTime() {
-        return null;
+        Map<Time, List<Jogo>> jogosPorTimeComoMandantes = todosOsJogosPorTimeComoMandantes();
+        Map<Time, List<Jogo>> jogosPorTimeComoVisitante = todosOsJogosPorTimeComoVisitante();
+
+        return Stream.concat(
+                        jogosPorTimeComoVisitante.entrySet().stream(),
+                        jogosPorTimeComoMandantes.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> {
+                    a.addAll(b);
+                    return a;
+                }));
     }
 
     public Map<Time, Map<Boolean, List<Jogo>>> jogosParticionadosPorMandanteTrueVisitanteFalse() {
+        Map<Time, List<Jogo>> jogosPorTime = todosOsJogosPorTime();
+
+   /*     List<Map.Entry<Time, List<Jogo>>> collect = jogosPorTime.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Collectors.partitioningBy((Jogo jogo) -> getKey() == jogo.getMandante() ))); */
+
         return null;
     }
 
     public Set<PosicaoTabela> tabela() {
-        return null;
+        Set<PosicaoTabela> posicoes = new TreeSet<>();
+
+        Map<Time, List<Jogo>> jogosPorTime = todosOsJogosPorTime();
+
+        for (Map.Entry<Time, List<Jogo>> map : jogosPorTime.entrySet()) {
+            Time time = map.getKey();
+            List<Jogo> jogos = map.getValue();
+
+            int totalJogosPorTime =  jogos.size();
+
+            long vitorias = jogos.stream()
+                    .filter(vencedor -> vencedor.getVencedor().equals(time))
+                    .count();
+
+            long empates = jogos.stream()
+                    .filter(empate -> empate.getMandantePlacar().equals(empate.getVisitantePlacar()))
+                    .count();
+
+            long derrotas = totalJogosPorTime - vitorias - empates;
+
+            long golsComoMandante = jogos.stream()
+                    .filter(mandante -> mandante.getMandante().equals(time))
+                    .mapToInt(Jogo::getMandantePlacar)
+                    .sum();
+
+            long golsComoVisitante = jogos.stream()
+                    .filter(visitante -> visitante.getVisitante().equals(time))
+                    .mapToInt(Jogo::getVisitantePlacar)
+                    .sum();
+
+            long golsPositivos = golsComoMandante + golsComoVisitante;
+
+            long golsSofridosMandante = jogos.stream()
+                    .filter(mandante -> !mandante.getMandante().equals(time))
+                    .mapToInt(Jogo::getMandantePlacar)
+                    .sum();
+
+            long golsSofridosVisitante = jogos.stream()
+                    .filter(visitante -> !visitante.getVisitante().equals(time))
+                    .mapToInt(Jogo::getVisitantePlacar)
+                    .sum();
+
+            long golsSofridos = golsSofridosMandante + golsSofridosVisitante;
+            long saldoDeDols = golsPositivos - golsSofridos;
+
+            PosicaoTabela posicaoTabela = new PosicaoTabela(
+                    time,
+                    vitorias,
+                    derrotas,
+                    empates,
+                    golsPositivos,
+                    golsSofridos,
+                    saldoDeDols
+            );
+
+            posicoes.add(posicaoTabela);
+        }
+        return posicoes;
     }
 
     // Criada uma classe estática para este método: LeituraDosDados
@@ -203,17 +269,17 @@ public class Brasileirao {
 
     // METODOS EXTRA
 
+
     private Map<Integer, Integer> totalGolsPorRodada() {
         return null;
     }
 
-    private Map<Time, Integer> totalDeGolsPorTime() {
-        return null;
-    }
+    private Map<Time, Integer> totalDeGolsPorTime() { return null; }
 
     private Map<Integer, Double> mediaDeGolsPorRodada() {
         return null;
     }
+
 
 
 }

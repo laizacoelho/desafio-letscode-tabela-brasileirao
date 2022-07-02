@@ -30,7 +30,7 @@ public class TestandoBrasileirao {
 
 //        Predicate<Jogo> brasileiraoPorAno = (jogo) -> jogo.data().data().getYear() == 2020;
 //        Predicate<Jogo> brasileiraoPorAno2 = (jogo) -> jogo.data().data().getYear() == 2021;
-//        Predicate<Jogo> filtro = (jogo) -> jogo.getData().getData().getYear() == 2014;
+ //       Predicate<Jogo> filtro = (jogo) -> jogo.getData().getData().getYear() == 2014;
 //        Predicate<Jogo> filtro = brasileiraoPorAno.or(brasileiraoPorAno2);
 
 
@@ -75,7 +75,14 @@ public class TestandoBrasileirao {
         System.out.println("Estatisticas (Vitorias Em casa) - " + totalVitoriasEmCasa);
         System.out.println("Estatisticas (Empates) - " + empates);
 
-        brasileirao.todosOsTimes();
+
+//        brasileirao.mediaGolsPorJogo();
+        brasileirao.todosOsPlacares();
+ //       brasileirao.todosOsJogosPorTimeComoMandantes();
+//        brasileirao.todosOsJogosPorTimeComoVisitante();
+        brasileirao.todosOsJogosPorTime();
+        brasileirao.jogosParticionadosPorMandanteTrueVisitanteFalse();
+  //      brasileirao.totalGolsPorRodada();
     }
 
     public static void imprimirTabela(Set<PosicaoTabela> posicoes) {

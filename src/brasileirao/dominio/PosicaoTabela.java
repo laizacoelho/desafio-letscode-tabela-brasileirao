@@ -1,6 +1,8 @@
 package brasileirao.dominio;
 
-public class PosicaoTabela {
+import java.util.Comparator;
+
+public class PosicaoTabela implements Comparable<PosicaoTabela> {
     private Time time;
     private Long vitorias;
     private Long derrotas;
@@ -41,6 +43,11 @@ public class PosicaoTabela {
                 ", golsSofridos=" + golsSofridos +
                 ", saldoDeGols=" + saldoDeGols +
                 '}';
+    }
+
+    @Override
+    public int compareTo(PosicaoTabela outraPosicao) {
+        return outraPosicao.getPontuacaoTotal().compareTo(this.getPontuacaoTotal());
     }
 }
 
