@@ -1,5 +1,7 @@
 package brasileirao.dominio;
 
+import java.util.Objects;
+
 public class Jogo{
     private Integer rodada;
     private DataDoJogo data;
@@ -54,6 +56,10 @@ public class Jogo{
         return mandante;
     }
 
+    public Time getVisitante() {
+        return visitante;
+    }
+
     public Integer getMandantePlacar() {
         return mandantePlacar;
     }
@@ -61,4 +67,17 @@ public class Jogo{
     public Integer getVisitantePlacar() {
         return visitantePlacar;
     }
+/*
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Jogo)) return false;
+        Jogo jogo = (Jogo) o;
+        return (Objects.equals(mandantePlacar, jogo.mandantePlacar) && Objects.equals(visitantePlacar, jogo.visitantePlacar)) || (Objects.equals(visitantePlacar, jogo.mandantePlacar) && Objects.equals(mandantePlacar, jogo.visitantePlacar));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRodada(), getData(), getMandante(), visitante, getVencedor(), arena, getMandantePlacar(), getVisitantePlacar(), estadoMandante, estadoVisitante, estadoVencedor);
+    } */
 }

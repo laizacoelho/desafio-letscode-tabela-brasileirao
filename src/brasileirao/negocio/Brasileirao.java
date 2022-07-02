@@ -16,17 +16,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.IntSummaryStatistics;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 public class Brasileirao {
 
@@ -55,11 +52,11 @@ public class Brasileirao {
             this.brasileirao =  this.jogos.stream()
                     .filter(jogo -> jogo.getData().getData().getYear() == 2021 ||
                             jogo.getData().getData().getYear() == 2020)
-                    .collect(Collectors.toList());
+                    .collect(toList());
         } else {
             this.brasileirao = this.jogos.stream()
                     .filter(jogo -> jogo.getData().getData().getYear() == ano)
-                    .collect(Collectors.toList());
+                    .collect(toList());
         }
     }
 
@@ -73,7 +70,9 @@ public class Brasileirao {
                 .summaryStatistics();
     }
 
-    public List<Jogo> todosOsJogos() { return null; }
+    public List<Jogo> todosOsJogos() {
+        return brasileirao;
+    }
 
     public Long totalVitoriasEmCasa() {
        return this.brasileirao.stream()
@@ -88,7 +87,6 @@ public class Brasileirao {
     }
 
     public Long totalEmpates() {
-
         return this.brasileirao.stream()
                 .filter(jogo -> jogo.getVencedor().getNome().equals("-"))
                 .count();
@@ -97,39 +95,62 @@ public class Brasileirao {
     public Long totalJogosComMenosDe3Gols() {
         return this.brasileirao.stream()
                 .mapToInt(jogo -> jogo.getVisitantePlacar() + jogo.getMandantePlacar())
-                .filter(jogo -> jogo < 3)
+                .filter(gols -> gols < 3)
                 .count();
     }
 
     public Long totalJogosCom3OuMaisGols() {
         return this.brasileirao.stream()
                 .mapToInt(jogo -> jogo.getVisitantePlacar() + jogo.getMandantePlacar())
-                .filter(jogo -> jogo >= 3)
+                .filter(gols -> gols >= 3)
                 .count();
     }
 
     public Map<Resultado, Long> todosOsPlacares() {
-        return null;
+
+        return this.brasileirao.stream()
+                .map(resultado -> new Resultado(resultado.getMandantePlacar(), resultado.getVisitantePlacar()))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
     }
 
     public Map.Entry<Resultado, Long> placarMaisRepetido() {
-        return null;
+
+        Map<Resultado, Long> placares = todosOsPlacares();
+
+        Optional<Map.Entry<Resultado, Long>> maiorOcorrencia = placares
+                .entrySet()
+                .stream()
+                .max(Comparator.comparing(Map.Entry::getValue));
+
+        return maiorOcorrencia.orElse(null);
+
     }
 
     public Map.Entry<Resultado, Long> placarMenosRepetido() {
-        return null;
+        Map<Resultado, Long> placares = todosOsPlacares();
+
+        Optional<Map.Entry<Resultado, Long>> menorOcorrencia = placares
+                .entrySet()
+                .stream()
+                .min(Comparator.comparing(Map.Entry::getValue));
+
+        return menorOcorrencia.orElse(null);
+
     }
 
-    private List<Time> todosOsTimes() {
-      /*  List<Time> mandantes = todosOsJogos()
+    public List<Time> todosOsTimes() {
+        List<Time> mandantes = todosOsJogos()
                 .stream()
-                .map(Jogo::mandante)
-                .toList();
+                .map(Jogo::getVisitante)
+                .collect(toList());
+               // .toList();
 
         List<Time> visitantes = todosOsJogos()
                 .stream()
-                .map(Jogo::visitante)
-                .toList();*/
+                .map(Jogo::getVisitante)
+                .collect(toList());
+              //  .toList();
 
         return null;
     }

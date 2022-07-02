@@ -1,16 +1,12 @@
 package brasileirao;
 
-import brasileirao.dados.LeituraDosDados;
-import brasileirao.dados.TratamentoDosDados;
-import brasileirao.dominio.Jogo;
+
 import brasileirao.dominio.PosicaoTabela;
 import brasileirao.dominio.Resultado;
 import brasileirao.negocio.Brasileirao;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -40,11 +36,11 @@ public class TestandoBrasileirao {
 
 //        Brasileirao brasileirao = new Brasileirao(file, filtro);
 
- //       Set<PosicaoTabela> posicoes = brasileirao.tabela();
+        Set<PosicaoTabela> posicoes = brasileirao.tabela();
 
         imprimirEstatisticas(brasileirao);
 
-//        imprimirTabela(posicoes);
+        imprimirTabela(posicoes);
 
     }
 
@@ -55,7 +51,7 @@ public class TestandoBrasileirao {
         System.out.println("Estatisticas (Total de jogos) - " + statistics.getCount());
         System.out.println("Estatisticas (Media de gols) - " + statistics.getAverage());
 
- /*       Map.Entry<Resultado, Long> placarMaisRepetido = brasileirao.placarMaisRepetido();
+        Map.Entry<Resultado, Long> placarMaisRepetido = brasileirao.placarMaisRepetido();
 
         System.out.println("Estatisticas (Placar mais repetido) - "
                 + placarMaisRepetido.getKey() + " (" +placarMaisRepetido.getValue() + " jogo(s))");
@@ -63,7 +59,7 @@ public class TestandoBrasileirao {
         Map.Entry<Resultado, Long> placarMenosRepetido = brasileirao.placarMenosRepetido();
 
         System.out.println("Estatisticas (Placar menos repetido) - "
-                + placarMenosRepetido.getKey() + " (" +placarMenosRepetido.getValue() + " jogo(s))"); */
+                + placarMenosRepetido.getKey() + " (" +placarMenosRepetido.getValue() + " jogo(s))");
 
         Long jogosCom3OuMaisGols = brasileirao.totalJogosCom3OuMaisGols();
         Long jogosComMenosDe3Gols = brasileirao.totalJogosComMenosDe3Gols();
@@ -78,6 +74,8 @@ public class TestandoBrasileirao {
         System.out.println("Estatisticas (Vitorias Fora de casa) - " + vitoriasForaDeCasa);
         System.out.println("Estatisticas (Vitorias Em casa) - " + totalVitoriasEmCasa);
         System.out.println("Estatisticas (Empates) - " + empates);
+
+        brasileirao.todosOsTimes();
     }
 
     public static void imprimirTabela(Set<PosicaoTabela> posicoes) {
