@@ -74,15 +74,6 @@ public class TestandoBrasileirao {
         System.out.println("Estatisticas (Vitorias Fora de casa) - " + vitoriasForaDeCasa);
         System.out.println("Estatisticas (Vitorias Em casa) - " + totalVitoriasEmCasa);
         System.out.println("Estatisticas (Empates) - " + empates);
-
-
-//        brasileirao.mediaGolsPorJogo();
-        brasileirao.todosOsPlacares();
- //       brasileirao.todosOsJogosPorTimeComoMandantes();
-//        brasileirao.todosOsJogosPorTimeComoVisitante();
-        brasileirao.todosOsJogosPorTime();
-        brasileirao.jogosParticionadosPorMandanteTrueVisitanteFalse();
-  //      brasileirao.totalGolsPorRodada();
     }
 
     public static void imprimirTabela(Set<PosicaoTabela> posicoes) {
