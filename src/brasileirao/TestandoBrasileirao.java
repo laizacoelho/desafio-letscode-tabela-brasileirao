@@ -8,7 +8,6 @@ import brasileirao.negocio.Brasileirao;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Predicate;
 
 
 public class TestandoBrasileirao {
@@ -74,6 +73,7 @@ public class TestandoBrasileirao {
         System.out.println("Estatisticas (Vitorias Fora de casa) - " + vitoriasForaDeCasa);
         System.out.println("Estatisticas (Vitorias Em casa) - " + totalVitoriasEmCasa);
         System.out.println("Estatisticas (Empates) - " + empates);
+
     }
 
     public static void imprimirTabela(Set<PosicaoTabela> posicoes) {

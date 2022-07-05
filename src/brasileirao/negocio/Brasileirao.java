@@ -14,6 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.toList;
 
 public class Brasileirao {
@@ -181,10 +182,19 @@ public class Brasileirao {
     public Map<Time, Map<Boolean, List<Jogo>>> jogosParticionadosPorMandanteTrueVisitanteFalse() {
         Map<Time, List<Jogo>> jogosPorTime = todosOsJogosPorTime();
 
-   /*     List<Map.Entry<Time, List<Jogo>>> collect = jogosPorTime.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, Collectors.partitioningBy((Jogo jogo) -> getKey() == jogo.getMandante() ))); */
-
-        return null;
+        return jogosPorTime
+                .entrySet()
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                entryset -> entryset
+                                        .getValue()
+                                        .stream()
+                                        .collect(
+                                                Collectors.partitioningBy(
+                                                        jogo -> entryset.getKey().equals(jogo.getMandante())
+                                                ))));
     }
 
     public Set<PosicaoTabela> tabela() {
