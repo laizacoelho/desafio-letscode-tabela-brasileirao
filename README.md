@@ -43,3 +43,4 @@ Essa tabela foi gerada com o filtro de 2020/21 que foi a temporada 2020 do campe
 
 
 Fonte de dados: https://github.com/adaoduque/Brasileirao_Dataset
+# desafio.letscode.tabela.brasileirao
